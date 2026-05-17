@@ -1,15 +1,16 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(Start-Sleep *)",
-      "PowerShell(Get-ChildItem *)",
-      "PowerShell(Get-Process *)",
-      "PowerShell(Get-NetTCPConnection *)",
-      "PowerShell(Get-Content *)",
-      "PowerShell(Get-WmiObject *)",
-      "Bash(wmic process *)",
-      "mcp__playwright__browser_navigate",
-      "mcp__playwright__browser_take_screenshot"
+﻿{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "command": "node -e \"const c=[]; process.stdin.on('data',d=>c.push(d)); process.stdin.on('end',()=>{ try{ const d=JSON.parse(Buffer.concat(c).toString().replace(/^\\uFEFF/,'')); const cmd=(d.tool_input||{}).command||''; if(cmd.includes('git commit')&&!cmd.includes('CHANGELOG')){ console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PostToolUse',additionalContext:'A git commit was just completed. Please run /update-docs now to update CHANGELOG.md and README.md with this change.'}})); }}catch(e){} });\" 2>/dev/null || true"
+          }
+        ]
+      }
     ]
   }
 }
