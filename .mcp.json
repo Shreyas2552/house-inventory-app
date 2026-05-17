@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "puppeteer": {
+      "command": "mcp-server-puppeteer",
+      "args": []
+    }
+  }
+}

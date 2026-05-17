@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+.expo/
+web-build/
+
+# Expo
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code local config (personal settings)
+.claude/settings.local.json
+.claude/memory/
+.mcp.json
+
+# TypeScript
+*.tsbuildinfo
+
+# Test screenshots (dev artifacts)
+house-inventory-app/*.png

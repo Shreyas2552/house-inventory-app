@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "House Inventory",
+    "slug": "house-inventory-app",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.personal.houseinventory"
+    },
+    "android": {
+      "package": "com.personal.houseinventory",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "POST_NOTIFICATIONS"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sqlite",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow House Inventory to discover nearby grocery stores."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#01696F"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow House Inventory to import receipt images."
+        }
+      ]
+    ]
+  }
+}
