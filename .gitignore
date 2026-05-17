@@ -44,3 +44,6 @@ Thumbs.db
 
 # Test screenshots (dev artifacts)
 house-inventory-app/*.png
+
+# Dev test scripts
+server/test-*.mjs

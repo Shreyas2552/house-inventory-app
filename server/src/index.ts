@@ -3,6 +3,8 @@ import cors from 'cors';
 import { searchKroger } from './scrapers/kroger';
 import { searchWalmart } from './scrapers/walmart';
 import { searchSafeway } from './scrapers/safeway';
+import { searchTarget } from './scrapers/target';
+import { searchFlipp } from './scrapers/flipp';
 import { searchInstacart } from './scrapers/instacart';
 import { priceCache } from './cache';
 import { PriceSearchRequest, StorePriceResult } from './types';
@@ -74,6 +76,28 @@ app.get('/api/walmart', async (req, res) => {
   }
 });
 
+app.get('/api/target', async (req, res) => {
+  const { q, zip } = req.query as Record<string, string>;
+  if (!q) { res.status(400).json({ error: 'q required' }); return; }
+  try {
+    const results = await searchTarget(q, zip || '10001');
+    res.json({ results });
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
+app.get('/api/flipp', async (req, res) => {
+  const { q, zip } = req.query as Record<string, string>;
+  if (!q) { res.status(400).json({ error: 'q required' }); return; }
+  try {
+    const results = await searchFlipp(q, zip || '10001');
+    res.json({ results });
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
 app.get('/api/safeway', async (req, res) => {
   const { q, zip } = req.query as Record<string, string>;
   if (!q) { res.status(400).json({ error: 'q required' }); return; }
@@ -98,6 +122,8 @@ async function searchOneItem(
   const searches: Promise<StorePriceResult[]>[] = [
     searchWalmart(itemName).catch((e) => { console.error('Walmart error:', e.message); return []; }),
     searchSafeway(itemName, zip).catch((e) => { console.error('Safeway error:', e.message); return []; }),
+    searchTarget(itemName, zip).catch((e) => { console.error('Target error:', e.message); return []; }),
+    searchFlipp(itemName, zip).catch((e) => { console.error('Flipp error:', e.message); return []; }),
   ];
 
   if (keys.krogerClientId && keys.krogerClientSecret) {
@@ -130,10 +156,9 @@ function getLinkOnlyResults(itemName: string, covered: Set<string>): StorePriceR
   const now = new Date().toISOString();
   const linkStores = [
     { chain: 'walmart', name: 'Walmart', url: `https://www.walmart.com/search?q=${q}` },
-    { chain: 'safeway', name: 'Safeway', url: `https://www.safeway.com/shop/search-results.html?q=${q}` },
+    { chain: 'target', name: 'Target', url: `https://www.target.com/s?searchTerm=${q}` },
     { chain: 'costco', name: 'Costco', url: `https://www.costco.com/CatalogSearch?keyword=${q}` },
     { chain: 'wholeFoods', name: 'Whole Foods', url: `https://www.wholefoodsmarket.com/search?text=${q}` },
-    { chain: 'target', name: 'Target', url: `https://www.target.com/s?searchTerm=${q}` },
   ];
 
   return linkStores
@@ -210,7 +235,8 @@ function annotateResults(
 
     let unitsNeeded = qty;
     let totalCost = price * qty;
-    let coverageNote: string | undefined;
+    // Preserve existing note (e.g. "Sale ends May 21" from Flipp); overwrite only when quantity math produces a better note
+    let coverageNote: string | undefined = r.coverageNote;
 
     if (restockParsed?.baseML && productParsed?.baseML) {
       const needed = restockParsed.baseML * qty;

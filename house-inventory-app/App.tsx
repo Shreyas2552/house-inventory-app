@@ -1060,8 +1060,17 @@ function PricesScreen({
     costco: '#005DAA',
     wholeFoods: '#00674B',
     safeway: '#E31837',
+    albertsons: '#E31837',
     fredMeyer: '#E31837',
+    qfc: '#286DB5',
     kroger: '#286DB5',
+    haggen: '#2E7D32',
+    groceryOutlet: '#F57F17',
+    aldi: '#00558C',
+    stopAndShop: '#E50000',
+    wegmans: '#006F3C',
+    acmeMarkets: '#E31837',
+    wholeFoods: '#00674B',
   };
 
   // Real results only (not link-only) for sorting + basket total
@@ -1108,7 +1117,7 @@ function PricesScreen({
     <View>
       <SectionTitle
         title="Price comparison"
-        subtitle={`${activeCount} item${activeCount === 1 ? '' : 's'} · ${hasKroger ? 'Live: Kroger/Fred Meyer' : 'Live: none'} · Links: Walmart, Target, Costco, Whole Foods, Safeway`}
+        subtitle={`${activeCount} item${activeCount === 1 ? '' : 's'} · Live prices from Kroger, Safeway, Target & 20+ stores · Links: Walmart, Costco, Whole Foods`}
       />
 
       {!hasKroger && (
@@ -1207,7 +1216,7 @@ function PricesScreen({
                             {brandLabel}
                           </Text>
                         )}
-                        {r.dataSource === 'api' && (
+                        {(r.dataSource === 'api' || r.dataSource === 'scrape') && (
                           <Text style={styles.sourceApiTag}>Live</Text>
                         )}
                       </View>

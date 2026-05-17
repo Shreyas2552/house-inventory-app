@@ -35,7 +35,7 @@ async function getNearestKrogerStore(
   if (cached) return JSON.parse(cached);
 
   const resp = await axios.get(
-    `${BASE}/locations?filter.zipCode=${zip}&filter.radiusInMiles=50&filter.limit=1`,
+    `${BASE}/locations?filter.zipCode.near=${zip}&filter.radiusInMiles=50&filter.limit=1`,
     { headers: { Authorization: `Bearer ${token}` } },
   );
 
